@@ -17,8 +17,8 @@ public interface InvoicesHandler {
      * @param currency invoice currency
      * @param amount amount to be paid
      * @param invoiceItemAdditionalDetails map containing additional invoice items details
-     * @throws StripeAPIException for any exception thrown by Stripe service
-     * @throws ValidationException for any validation exception
+     * @throws {@link StripeAPIException} for any exception thrown by Stripe service
+     * @throws {@link ValidationException} for any validation exception
      * @return {@link StripeInvoice} item
      */
     StripeInvoice createInvoice(String apiKey, String customer, Map<String, String> invoiceAdditionalDetails, String currency, Integer amount, Map<String, String> invoiceItemAdditionalDetails) throws StripeAPIException, ValidationException;
@@ -29,8 +29,8 @@ public interface InvoicesHandler {
      *
      * @param apiKey Stripe's apiKey
      * @param invoiceId id of the invoice to be retrieved from Stripe
-     * @throws StripeAPIException for any exception thrown by Stripe service
-     * @throws ValidationException for any validation exception
+     * @throws {@link StripeAPIException} for any exception thrown by Stripe service
+     * @throws {@link ValidationException} for any validation exception
      * @return {@link StripeInvoice} item
      */
     StripeInvoice getInvoiceById(String apiKey, String invoiceId) throws StripeAPIException, ValidationException;

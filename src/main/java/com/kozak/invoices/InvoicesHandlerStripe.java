@@ -3,7 +3,6 @@ package com.kozak.invoices;
 import com.kozak.exceptions.StripeAPIException;
 import com.kozak.exceptions.ValidationException;
 import com.kozak.model.StripeInvoice;
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.*;
 import com.stripe.net.RequestOptions;

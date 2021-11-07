@@ -2,6 +2,7 @@ package com.kozak.invoices;
 
 import com.kozak.exceptions.StripeAPIException;
 import com.kozak.exceptions.ValidationException;
+import com.kozak.model.StripeInvoice;
 import com.stripe.model.Invoice;
 
 import java.util.Map;
@@ -19,9 +20,9 @@ public interface InvoicesHandler {
      * @param invoiceItemAdditionalDetails map containing additional invoice items details
      * @throws StripeAPIException for any exception thrown by Stripe service
      * @throws ValidationException for any validation exception
-     * @return invoice item
+     * @return {@link StripeInvoice} item
      */
-    Invoice createInvoice(String apiKey, String customer, Map<String, String> invoiceAdditionalDetails, String currency, Integer amount, Map<String, String> invoiceItemAdditionalDetails) throws StripeAPIException, ValidationException;
+    StripeInvoice createInvoice(String apiKey, String customer, Map<String, String> invoiceAdditionalDetails, String currency, Integer amount, Map<String, String> invoiceItemAdditionalDetails) throws StripeAPIException, ValidationException;
 
 
     /**
@@ -31,7 +32,7 @@ public interface InvoicesHandler {
      * @param invoiceId id of the invoice to be retrieved from Stripe
      * @throws StripeAPIException for any exception thrown by Stripe service
      * @throws ValidationException for any validation exception
-     * @return invoice item
+     * @return {@link StripeInvoice} item
      */
-    Invoice getInvoiceById(String apiKey, String invoiceId) throws StripeAPIException, ValidationException;
+    StripeInvoice getInvoiceById(String apiKey, String invoiceId) throws StripeAPIException, ValidationException;
 }

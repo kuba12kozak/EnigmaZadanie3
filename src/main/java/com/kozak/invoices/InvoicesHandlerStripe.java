@@ -2,6 +2,8 @@ package com.kozak.invoices;
 
 import com.kozak.exceptions.StripeAPIException;
 import com.kozak.exceptions.ValidationException;
+import com.kozak.model.StripeInvoice;
+import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.*;
 import com.stripe.net.RequestOptions;
@@ -13,23 +15,32 @@ import java.util.Map;
 class InvoicesHandlerStripe implements InvoicesHandler {
 
     @Override
-    public Invoice createInvoice(String apiKey,
-                                 String customer,
-                                 Map<String, String> invoiceAdditionalDetails,
-                                 String currency,
-                                 Integer amount,
-                                 Map<String, String> invoiceItemAdditionalDetails) throws StripeAPIException, ValidationException {
+    public StripeInvoice createInvoice(String apiKey,
+                                       String customer,
+                                       Map<String, String> invoiceAdditionalDetails,
+                                       String currency,
+                                       Integer amount,
+                                       Map<String, String> invoiceItemAdditionalDetails) throws StripeAPIException, ValidationException {
         validateDataForCreatingInvoice(apiKey, customer, currency, amount);
         saveInvoiceItem(apiKey, customer, currency, amount);
         return saveInvoice(apiKey, customer, invoiceAdditionalDetails);
     }
 
     @Override
-    public Invoice getInvoiceById(String apiKey, String invoiceId) throws StripeAPIException, ValidationException {
+    public StripeInvoice getInvoiceById(String apiKey, String invoiceId) throws StripeAPIException, ValidationException {
         validateDataForGettingInvoiceById(apiKey, invoiceId);
 
         try {
-            return Invoice.retrieve(invoiceId, getRequestOptions(apiKey));
+            Invoice invoice = Invoice.retrieve(invoiceId, getRequestOptions(apiKey));
+            return StripeInvoice.builder()
+                    .id(invoice.getId())
+                    .accountName(invoice.getAccountName())
+                    .created(invoice.getCreated())
+                    .description(invoice.getDescription())
+                    .status(invoice.getStatus())
+                    .total(invoice.getTotal())
+                    .currency(invoice.getCurrency())
+                    .build();
         } catch (StripeException e) {
             throw new StripeAPIException(e.getMessage());
         }
@@ -48,13 +59,22 @@ class InvoicesHandlerStripe implements InvoicesHandler {
         }
     }
 
-    private Invoice saveInvoice(String apiKey, String customer, Map<String, String> invoiceAdditionalDetails) throws StripeAPIException {
+    private StripeInvoice saveInvoice(String apiKey, String customer, Map<String, String> invoiceAdditionalDetails) throws StripeAPIException {
         Map<String, Object> invoiceParams = new HashMap<>();
         invoiceParams.put("customer", customer);
         invoiceParams.putAll(invoiceAdditionalDetails);
 
         try {
-            return Invoice.create(invoiceParams, getRequestOptions(apiKey));
+            Invoice invoice = Invoice.create(invoiceParams, getRequestOptions(apiKey));
+            return StripeInvoice.builder()
+                    .id(invoice.getId())
+                    .accountName(invoice.getAccountName())
+                    .created(invoice.getCreated())
+                    .description(invoice.getDescription())
+                    .status(invoice.getStatus())
+                    .total(invoice.getTotal())
+                    .currency(invoice.getCurrency())
+                    .build();
         } catch (StripeException e) {
             throw new StripeAPIException(e.getMessage());
         }

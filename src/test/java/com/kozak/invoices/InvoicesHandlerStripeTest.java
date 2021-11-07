@@ -2,6 +2,7 @@ package com.kozak.invoices;
 
 import com.kozak.exceptions.StripeAPIException;
 import com.kozak.exceptions.ValidationException;
+import com.kozak.model.StripeInvoice;
 import com.stripe.model.Invoice;
 import org.junit.jupiter.api.Test;
 
@@ -30,12 +31,11 @@ class InvoicesHandlerStripeTest {
     @Test
     void getInvoiceByIdSuccessfully() throws ValidationException, StripeAPIException {
         Map<String, String> map = new HashMap<>();
-        Invoice invoice = invoicesHandler.createInvoice(API_KEY, CUSTOMER_ID, map, CURRENCY, AMOUNT, map);
-        Invoice invoiceById = invoicesHandler.getInvoiceById(API_KEY, invoice.getId());
+        StripeInvoice invoice = invoicesHandler.createInvoice(API_KEY, CUSTOMER_ID, map, CURRENCY, AMOUNT, map);
+        StripeInvoice invoiceById = invoicesHandler.getInvoiceById(API_KEY, invoice.getId());
         assertNotNull(invoiceById);
         assertEquals(invoice.getId(), invoiceById.getId());
         assertEquals(invoice.getCurrency(), invoiceById.getCurrency());
-        assertEquals(invoice.getLines(), invoiceById.getLines());
     }
 
     @Test
